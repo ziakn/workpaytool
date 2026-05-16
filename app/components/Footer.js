@@ -6,7 +6,9 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="footer-brand">
         <Link className="logo" href="/">
-          WorkPayTools
+          <span>Work</span>
+          <span>Pay</span>
+          <span>Tools</span>
         </Link>
         <p>
           Free salary, tax, invoice, VAT, and business calculators for
@@ -26,6 +28,12 @@ export default function Footer() {
             </ul>
           </section>
         ))}
+      </div>
+      <div className="footer-bottom">
+        <p>© 2026 WorkPayTools. All rights reserved.</p>
+        <p>
+          Disclaimer: Tools provide estimates for informational purposes only.
+        </p>
       </div>
     </footer>
   );

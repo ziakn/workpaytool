@@ -1,12 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
-const money = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 2,
-});
+import { CurrencySelector } from "./ui";
 
 const number = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
@@ -15,6 +10,14 @@ const number = new Intl.NumberFormat("en-US", {
 function toNumber(value) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function formatMoney(currency, value) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 2,
+  }).format(Number.isFinite(value) ? value : 0);
 }
 
 function Field({ label, value, onChange, type = "number", step = "0.01" }) {
@@ -46,10 +49,27 @@ function SelectField({ label, value, onChange, options }) {
   );
 }
 
-function Results({ items }) {
+function InputCard({ children }) {
   return (
-    <div className="result-section" aria-live="polite">
+    <div className="input-card">
+      <h2>Calculator Inputs</h2>
+      {children}
+    </div>
+  );
+}
+
+function Results({ items }) {
+  const topResult = items[0];
+
+  return (
+    <div className="result-card" aria-live="polite">
       <h2>Results</h2>
+      {topResult && (
+        <div className="top-result">
+          <span>{topResult[0]}</span>
+          <strong>{topResult[1]}</strong>
+        </div>
+      )}
       <div className="result-panel">
         {items.map(([label, value]) => (
           <div className="result-row" key={label}>
@@ -66,16 +86,28 @@ function Results({ items }) {
   );
 }
 
-function CalculatorActions() {
+function CalculatorActions({ onReset }) {
   return (
     <div className="calc-actions">
       <button type="button">Calculate</button>
+      <button className="reset-button" type="button" onClick={onReset}>
+        Reset
+      </button>
       <span>Results update automatically as you edit the fields.</span>
     </div>
   );
 }
 
+function ValidationMessage({ children }) {
+  if (!children) {
+    return null;
+  }
+
+  return <p className="field-error">{children}</p>;
+}
+
 function SalaryCalculator({ variant }) {
+  const [currency, setCurrency] = useState("USD");
   const [amount, setAmount] = useState("60000");
   const [basis, setBasis] = useState("annual");
   const [hours, setHours] = useState("40");
@@ -125,67 +157,84 @@ function SalaryCalculator({ variant }) {
   }, [amount, basis, hours, days, weeks, taxRate, otherRate, fixedDeduction]);
 
   const showBasis = !["hourlySalary", "salaryHourly"].includes(variant);
+  const validation =
+    toNumber(amount) <= 0 ? "Please enter a pay amount greater than 0." : "";
+  const reset = () => {
+    setCurrency("USD");
+    setAmount("60000");
+    setBasis("annual");
+    setHours("40");
+    setDays("5");
+    setWeeks("52");
+    setTaxRate("22");
+    setOtherRate("5");
+    setFixedDeduction("0");
+  };
 
   return (
     <div className="calculator-box">
-      <div className="calc-form">
-        {showBasis && (
-          <SelectField
-            label="Pay amount is"
-            value={basis}
-            onChange={setBasis}
-            options={[
-              { label: "Annual salary", value: "annual" },
-              { label: "Monthly pay", value: "monthly" },
-              { label: "Weekly pay", value: "weekly" },
-              { label: "Daily pay", value: "daily" },
-              { label: "Hourly pay", value: "hourly" },
-            ]}
-          />
-        )}
-        <Field
-          label={
-            variant === "hourlySalary"
-              ? "Hourly wage"
-              : variant === "salaryHourly"
-                ? "Annual salary"
-                : "Pay amount"
-          }
-          value={amount}
-          onChange={setAmount}
-        />
-        <Field label="Hours per week" value={hours} onChange={setHours} />
-        <Field label="Work days per week" value={days} onChange={setDays} />
-        <Field label="Paid weeks per year" value={weeks} onChange={setWeeks} />
-        {["takeHome", "grossNet"].includes(variant) && (
-          <>
-            <Field label="Estimated tax rate %" value={taxRate} onChange={setTaxRate} />
-            <Field label="Other deductions %" value={otherRate} onChange={setOtherRate} />
-            <Field
-              label="Fixed monthly deductions"
-              value={fixedDeduction}
-              onChange={setFixedDeduction}
+      <InputCard>
+        <div className="calc-form">
+          <CurrencySelector value={currency} onChange={setCurrency} />
+          {showBasis && (
+            <SelectField
+              label="Pay frequency"
+              value={basis}
+              onChange={setBasis}
+              options={[
+                { label: "Annual salary", value: "annual" },
+                { label: "Monthly pay", value: "monthly" },
+                { label: "Weekly pay", value: "weekly" },
+                { label: "Daily pay", value: "daily" },
+                { label: "Hourly pay", value: "hourly" },
+              ]}
             />
-          </>
-        )}
-      </div>
-      <CalculatorActions />
+          )}
+          <Field
+            label={
+              variant === "hourlySalary"
+                ? "Hourly wage"
+                : variant === "salaryHourly"
+                  ? "Annual salary"
+                  : "Pay amount"
+            }
+            value={amount}
+            onChange={setAmount}
+          />
+          <Field label="Hours per week" value={hours} onChange={setHours} />
+          <Field label="Days per week" value={days} onChange={setDays} />
+          <Field label="Paid weeks per year" value={weeks} onChange={setWeeks} />
+          {["takeHome", "grossNet"].includes(variant) && (
+            <>
+              <Field label="Estimated tax rate %" value={taxRate} onChange={setTaxRate} />
+              <Field label="Other deductions %" value={otherRate} onChange={setOtherRate} />
+              <Field
+                label="Fixed monthly deductions"
+                value={fixedDeduction}
+                onChange={setFixedDeduction}
+              />
+            </>
+          )}
+        </div>
+        <ValidationMessage>{validation}</ValidationMessage>
+        <CalculatorActions onReset={reset} />
+      </InputCard>
       <Results
         items={
           ["takeHome", "grossNet"].includes(variant)
             ? [
-                ["Gross annual pay", money.format(values.annual)],
-                ["Estimated deductions", money.format(values.deductions)],
-                ["Estimated net annual pay", money.format(values.net)],
-                ["Estimated net monthly pay", money.format(values.netMonthly)],
+                ["Estimated net annual pay", formatMoney(currency, values.net)],
+                ["Gross annual pay", formatMoney(currency, values.annual)],
+                ["Estimated deductions", formatMoney(currency, values.deductions)],
+                ["Estimated net monthly pay", formatMoney(currency, values.netMonthly)],
               ]
             : [
-                ["Annual pay", money.format(values.annual)],
-                ["Monthly pay", money.format(values.monthly)],
-                ["Biweekly pay", money.format(values.biweekly)],
-                ["Weekly pay", money.format(values.weekly)],
-                ["Daily pay", money.format(values.daily)],
-                ["Hourly pay", money.format(values.hourly)],
+                ["Monthly pay", formatMoney(currency, values.monthly)],
+                ["Annual pay", formatMoney(currency, values.annual)],
+                ["Biweekly pay", formatMoney(currency, values.biweekly)],
+                ["Weekly pay", formatMoney(currency, values.weekly)],
+                ["Daily pay", formatMoney(currency, values.daily)],
+                ["Hourly pay", formatMoney(currency, values.hourly)],
               ]
         }
       />
@@ -194,6 +243,7 @@ function SalaryCalculator({ variant }) {
 }
 
 function BusinessCalculator({ variant }) {
+  const [currency, setCurrency] = useState("USD");
   const [cost, setCost] = useState("60");
   const [price, setPrice] = useState("100");
   const [rate, setRate] = useState("20");
@@ -236,21 +286,45 @@ function BusinessCalculator({ variant }) {
       freelanceGross,
     };
   }, [cost, price, rate, fixedCosts, loanAmount, loanRate, loanYears, targetIncome, expenses, taxRate, billableHours]);
+  const reset = () => {
+    setCurrency("USD");
+    setCost("60");
+    setPrice("100");
+    setRate("20");
+    setFixedCosts("5000");
+    setLoanAmount("50000");
+    setLoanRate("9");
+    setLoanYears("5");
+    setTargetIncome("80000");
+    setExpenses("12000");
+    setTaxRate("25");
+    setBillableHours("1200");
+  };
+  const validation =
+    variant === "loan" && toNumber(loanAmount) <= 0
+      ? "Please enter a loan amount greater than 0."
+      : variant !== "loan" && toNumber(price) <= 0
+        ? "Please enter a selling price greater than 0."
+        : "";
 
   if (variant === "loan") {
     return (
       <div className="calculator-box">
-        <div className="calc-form">
-          <Field label="Loan amount" value={loanAmount} onChange={setLoanAmount} />
-          <Field label="Annual interest rate %" value={loanRate} onChange={setLoanRate} />
-          <Field label="Loan term in years" value={loanYears} onChange={setLoanYears} />
-        </div>
-        <CalculatorActions />
+        <InputCard>
+          <div className="calc-form">
+            <CurrencySelector value={currency} onChange={setCurrency} />
+            <Field label="Loan amount" value={loanAmount} onChange={setLoanAmount} />
+            <Field label="Annual interest rate %" value={loanRate} onChange={setLoanRate} />
+            <Field label="Loan term in years" value={loanYears} onChange={setLoanYears} />
+          </div>
+          <ValidationMessage>{validation}</ValidationMessage>
+          <CalculatorActions onReset={reset} />
+        </InputCard>
         <Results
           items={[
-            ["Monthly payment", money.format(results.monthlyPayment)],
-            ["Total repayment", money.format(results.totalRepayment)],
-            ["Total interest", money.format(results.totalRepayment - toNumber(loanAmount))],
+            ["Monthly payment", formatMoney(currency, results.monthlyPayment)],
+            ["Total repayment", formatMoney(currency, results.totalRepayment)],
+            ["Total interest", formatMoney(currency, results.totalRepayment - toNumber(loanAmount))],
           ]}
         />
       </div>
@@ -260,17 +334,20 @@ function BusinessCalculator({ variant }) {
   if (variant === "freelanceRate") {
     return (
       <div className="calculator-box">
-        <div className="calc-form">
-          <Field label="Target annual income" value={targetIncome} onChange={setTargetIncome} />
-          <Field label="Annual business expenses" value={expenses} onChange={setExpenses} />
-          <Field label="Estimated tax rate %" value={taxRate} onChange={setTaxRate} />
-          <Field label="Billable hours per year" value={billableHours} onChange={setBillableHours} />
-        </div>
-        <CalculatorActions />
+        <InputCard>
+          <div className="calc-form">
+            <CurrencySelector value={currency} onChange={setCurrency} />
+            <Field label="Target annual income" value={targetIncome} onChange={setTargetIncome} />
+            <Field label="Annual business expenses" value={expenses} onChange={setExpenses} />
+            <Field label="Estimated tax rate %" value={taxRate} onChange={setTaxRate} />
+            <Field label="Billable hours per year" value={billableHours} onChange={setBillableHours} />
+          </div>
+          <CalculatorActions onReset={reset} />
+        </InputCard>
         <Results
           items={[
-            ["Required gross revenue", money.format(results.freelanceGross)],
-            ["Suggested hourly rate", money.format(results.hourlyRate)],
+            ["Suggested hourly rate", formatMoney(currency, results.hourlyRate)],
+            ["Required gross revenue", formatMoney(currency, results.freelanceGross)],
           ]}
         />
       </div>
@@ -279,42 +356,46 @@ function BusinessCalculator({ variant }) {
 
   return (
     <div className="calculator-box">
-      <div className="calc-form">
-        <Field label="Cost" value={cost} onChange={setCost} />
-        <Field label="Selling price" value={price} onChange={setPrice} />
-        {variant !== "profitMargin" && (
-          <Field
-            label={variant === "discount" ? "Discount %" : "Markup or rate %"}
-            value={rate}
-            onChange={setRate}
-          />
-        )}
-        {variant === "breakEven" && (
-          <Field label="Fixed costs" value={fixedCosts} onChange={setFixedCosts} />
-        )}
-      </div>
-      <CalculatorActions />
+      <InputCard>
+        <div className="calc-form">
+          <CurrencySelector value={currency} onChange={setCurrency} />
+          <Field label="Cost" value={cost} onChange={setCost} />
+          <Field label="Selling price" value={price} onChange={setPrice} />
+          {variant !== "profitMargin" && (
+            <Field
+              label={variant === "discount" ? "Discount %" : "Markup or rate %"}
+              value={rate}
+              onChange={setRate}
+            />
+          )}
+          {variant === "breakEven" && (
+            <Field label="Fixed costs" value={fixedCosts} onChange={setFixedCosts} />
+          )}
+        </div>
+        <ValidationMessage>{validation}</ValidationMessage>
+        <CalculatorActions onReset={reset} />
+      </InputCard>
       <Results
         items={
           variant === "discount"
             ? [
-                ["Discount amount", money.format(results.discountAmount)],
-                ["Final price", money.format(results.discounted)],
+                ["Final price", formatMoney(currency, results.discounted)],
+                ["Discount amount", formatMoney(currency, results.discountAmount)],
               ]
             : variant === "markup"
               ? [
-                  ["Selling price from markup", money.format(results.sellingPriceFromMarkup)],
+                  ["Selling price from markup", formatMoney(currency, results.sellingPriceFromMarkup)],
                   ["Markup on current price", `${number.format(results.markup)}%`],
-                  ["Profit on current price", money.format(results.profit)],
+                  ["Profit on current price", formatMoney(currency, results.profit)],
                 ]
               : variant === "breakEven"
                 ? [
-                    ["Contribution per unit", money.format(toNumber(price) - toNumber(cost))],
                     ["Break-even units", number.format(results.breakEvenUnits)],
-                    ["Revenue at break-even", money.format(results.breakEvenUnits * toNumber(price))],
+                    ["Contribution per unit", formatMoney(currency, toNumber(price) - toNumber(cost))],
+                    ["Revenue at break-even", formatMoney(currency, results.breakEvenUnits * toNumber(price))],
                   ]
                 : [
-                    ["Profit", money.format(results.profit)],
+                    ["Profit", formatMoney(currency, results.profit)],
                     ["Profit margin", `${number.format(results.margin)}%`],
                     ["Markup", `${number.format(results.markup)}%`],
                   ]
@@ -332,6 +413,7 @@ function DocumentGenerator({ variant }) {
     purchaseOrder: ["Purchase Order", "Supplier name", "PO number", "Delivery date"],
   }[variant];
   const [from, setFrom] = useState("WorkPayTools Studio");
+  const [currency, setCurrency] = useState("USD");
   const [to, setTo] = useState(labels[1].includes("Supplier") ? "Supplier Ltd" : "Client Ltd");
   const [docNumber, setDocNumber] = useState("001");
   const [date, setDate] = useState("2026-05-16");
@@ -343,21 +425,35 @@ function DocumentGenerator({ variant }) {
   const subtotal = toNumber(quantity) * toNumber(unitPrice);
   const tax = subtotal * (toNumber(taxRate) / 100);
   const total = subtotal + tax;
+  const reset = () => {
+    setCurrency("USD");
+    setFrom("WorkPayTools Studio");
+    setTo(labels[1].includes("Supplier") ? "Supplier Ltd" : "Client Ltd");
+    setDocNumber("001");
+    setDate("2026-05-16");
+    setDescription("Professional services");
+    setQuantity("1");
+    setUnitPrice("500");
+    setTaxRate("5");
+  };
 
   return (
     <div className="document-tool">
       <div className="calculator-box">
-        <div className="calc-form">
-          <Field label="From" type="text" value={from} onChange={setFrom} />
-          <Field label={labels[1]} type="text" value={to} onChange={setTo} />
-          <Field label={labels[2]} type="text" value={docNumber} onChange={setDocNumber} />
-          <Field label={labels[3]} type="date" value={date} onChange={setDate} step="1" />
-          <Field label="Item description" type="text" value={description} onChange={setDescription} />
-          <Field label="Quantity" value={quantity} onChange={setQuantity} />
-          <Field label="Unit price" value={unitPrice} onChange={setUnitPrice} />
-          <Field label="Tax rate %" value={taxRate} onChange={setTaxRate} />
-        </div>
-        <CalculatorActions />
+        <InputCard>
+          <div className="calc-form">
+            <CurrencySelector value={currency} onChange={setCurrency} />
+            <Field label="From" type="text" value={from} onChange={setFrom} />
+            <Field label={labels[1]} type="text" value={to} onChange={setTo} />
+            <Field label={labels[2]} type="text" value={docNumber} onChange={setDocNumber} />
+            <Field label={labels[3]} type="date" value={date} onChange={setDate} step="1" />
+            <Field label="Item description" type="text" value={description} onChange={setDescription} />
+            <Field label="Quantity" value={quantity} onChange={setQuantity} />
+            <Field label="Unit price" value={unitPrice} onChange={setUnitPrice} />
+            <Field label="Tax rate %" value={taxRate} onChange={setTaxRate} />
+          </div>
+          <CalculatorActions onReset={reset} />
+        </InputCard>
         <button className="print-button" type="button" onClick={() => window.print()}>
           Print or Save PDF
         </button>
@@ -385,16 +481,16 @@ function DocumentGenerator({ variant }) {
             <tr>
               <td>{description}</td>
               <td>{quantity}</td>
-              <td>{money.format(toNumber(unitPrice))}</td>
-              <td>{money.format(subtotal)}</td>
+              <td>{formatMoney(currency, toNumber(unitPrice))}</td>
+              <td>{formatMoney(currency, subtotal)}</td>
             </tr>
           </tbody>
         </table>
         <Results
           items={[
-            ["Subtotal", money.format(subtotal)],
-            ["Tax", money.format(tax)],
-            ["Total", money.format(total)],
+            ["Total", formatMoney(currency, total)],
+            ["Subtotal", formatMoney(currency, subtotal)],
+            ["Tax", formatMoney(currency, tax)],
           ]}
         />
       </div>
@@ -403,6 +499,7 @@ function DocumentGenerator({ variant }) {
 }
 
 function TaxCalculator() {
+  const [currency, setCurrency] = useState("USD");
   const [amount, setAmount] = useState("100");
   const [rate, setRate] = useState("20");
   const [mode, setMode] = useState("add");
@@ -411,28 +508,40 @@ function TaxCalculator() {
   const net = mode === "add" ? base : base / (1 + taxRate);
   const tax = mode === "add" ? base * taxRate : base - net;
   const gross = net + tax;
+  const reset = () => {
+    setCurrency("USD");
+    setAmount("100");
+    setRate("20");
+    setMode("add");
+  };
+  const validation =
+    toNumber(amount) <= 0 ? "Please enter an amount greater than 0." : "";
 
   return (
     <div className="calculator-box">
-      <div className="calc-form">
-        <SelectField
-          label="Calculation"
-          value={mode}
-          onChange={setMode}
-          options={[
-            { label: "Add tax to amount", value: "add" },
-            { label: "Remove tax from total", value: "remove" },
-          ]}
-        />
-        <Field label="Amount" value={amount} onChange={setAmount} />
-        <Field label="Tax rate %" value={rate} onChange={setRate} />
-      </div>
-      <CalculatorActions />
+      <InputCard>
+        <div className="calc-form">
+          <CurrencySelector value={currency} onChange={setCurrency} />
+          <SelectField
+            label="Calculation"
+            value={mode}
+            onChange={setMode}
+            options={[
+              { label: "Add tax to amount", value: "add" },
+              { label: "Remove tax from total", value: "remove" },
+            ]}
+          />
+          <Field label="Amount" value={amount} onChange={setAmount} />
+          <Field label="Tax rate %" value={rate} onChange={setRate} />
+        </div>
+        <ValidationMessage>{validation}</ValidationMessage>
+        <CalculatorActions onReset={reset} />
+      </InputCard>
       <Results
         items={[
-          ["Net amount", money.format(net)],
-          ["Tax amount", money.format(tax)],
-          ["Gross amount", money.format(gross)],
+          ["Gross amount", formatMoney(currency, gross)],
+          ["Net amount", formatMoney(currency, net)],
+          ["Tax amount", formatMoney(currency, tax)],
         ]}
       />
     </div>
@@ -443,6 +552,11 @@ function BusinessDaysCalculator() {
   const [start, setStart] = useState("2026-05-01");
   const [end, setEnd] = useState("2026-05-31");
   const [includeStart, setIncludeStart] = useState("yes");
+  const reset = () => {
+    setStart("2026-05-01");
+    setEnd("2026-05-31");
+    setIncludeStart("yes");
+  };
 
   const days = useMemo(() => {
     const startDate = new Date(`${start}T00:00:00`);
@@ -468,47 +582,63 @@ function BusinessDaysCalculator() {
 
   return (
     <div className="calculator-box">
-      <div className="calc-form">
-        <Field label="Start date" type="date" value={start} onChange={setStart} step="1" />
-        <Field label="End date" type="date" value={end} onChange={setEnd} step="1" />
-        <SelectField
-          label="Include start date"
-          value={includeStart}
-          onChange={setIncludeStart}
-          options={[
-            { label: "Yes", value: "yes" },
-            { label: "No", value: "no" },
-          ]}
-        />
-      </div>
-      <CalculatorActions />
+      <InputCard>
+        <div className="calc-form">
+          <Field label="Start date" type="date" value={start} onChange={setStart} step="1" />
+          <Field label="End date" type="date" value={end} onChange={setEnd} step="1" />
+          <SelectField
+            label="Include start date"
+            value={includeStart}
+            onChange={setIncludeStart}
+            options={[
+              { label: "Yes", value: "yes" },
+              { label: "No", value: "no" },
+            ]}
+          />
+        </div>
+        <CalculatorActions onReset={reset} />
+      </InputCard>
       <Results items={[["Business days", number.format(days)]]} />
     </div>
   );
 }
 
 function OvertimeCalculator() {
+  const [currency, setCurrency] = useState("USD");
   const [rate, setRate] = useState("25");
   const [regularHours, setRegularHours] = useState("40");
   const [overtimeHours, setOvertimeHours] = useState("5");
   const [multiplier, setMultiplier] = useState("1.5");
   const regularPay = toNumber(rate) * toNumber(regularHours);
   const overtimePay = toNumber(rate) * toNumber(multiplier) * toNumber(overtimeHours);
+  const reset = () => {
+    setCurrency("USD");
+    setRate("25");
+    setRegularHours("40");
+    setOvertimeHours("5");
+    setMultiplier("1.5");
+  };
+  const validation =
+    toNumber(rate) <= 0 ? "Please enter an hourly rate greater than 0." : "";
 
   return (
     <div className="calculator-box">
-      <div className="calc-form">
-        <Field label="Hourly rate" value={rate} onChange={setRate} />
-        <Field label="Regular hours" value={regularHours} onChange={setRegularHours} />
-        <Field label="Overtime hours" value={overtimeHours} onChange={setOvertimeHours} />
-        <Field label="Overtime multiplier" value={multiplier} onChange={setMultiplier} />
-      </div>
-      <CalculatorActions />
+      <InputCard>
+        <div className="calc-form">
+          <CurrencySelector value={currency} onChange={setCurrency} />
+          <Field label="Hourly rate" value={rate} onChange={setRate} />
+          <Field label="Regular hours" value={regularHours} onChange={setRegularHours} />
+          <Field label="Overtime hours" value={overtimeHours} onChange={setOvertimeHours} />
+          <Field label="Overtime multiplier" value={multiplier} onChange={setMultiplier} />
+        </div>
+        <ValidationMessage>{validation}</ValidationMessage>
+        <CalculatorActions onReset={reset} />
+      </InputCard>
       <Results
         items={[
-          ["Regular pay", money.format(regularPay)],
-          ["Overtime pay", money.format(overtimePay)],
-          ["Total pay", money.format(regularPay + overtimePay)],
+          ["Total pay", formatMoney(currency, regularPay + overtimePay)],
+          ["Regular pay", formatMoney(currency, regularPay)],
+          ["Overtime pay", formatMoney(currency, overtimePay)],
         ]}
       />
     </div>

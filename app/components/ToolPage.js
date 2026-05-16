@@ -1,5 +1,7 @@
 import Link from "next/link";
 import CalculatorClient from "./CalculatorClient";
+import FAQAccordion from "./FAQAccordion";
+import { AdSlot } from "./ui";
 import { toolPages } from "../data/mvpTools";
 
 function Breadcrumb({ config }) {
@@ -80,6 +82,7 @@ export default function ToolPage({ config }) {
         </div>
         <CalculatorClient type={config.type} />
       </section>
+      <AdSlot label="Ad placeholder after calculator results" />
       <section className="section content-section">
         <div className="section-heading">
           <p className="eyebrow">How it works</p>
@@ -105,6 +108,7 @@ export default function ToolPage({ config }) {
         </div>
         <p>{config.example}</p>
       </section>
+      <AdSlot label="Ad placeholder inside calculator guide" />
       <section className="section content-section">
         <div className="section-heading">
           <p className="eyebrow">Use cases</p>
@@ -126,25 +130,21 @@ export default function ToolPage({ config }) {
             const related = toolPages[slug];
             return (
               <Link key={slug} href={related.path}>
-                {related.title}
+                <span>{related.title}</span>
+                <small>{related.metaDescription}</small>
+                <strong>→</strong>
               </Link>
             );
           })}
         </div>
       </section>
+      <AdSlot label="Ad placeholder before FAQ" />
       <section className="section faq-section">
         <div className="section-heading">
           <p className="eyebrow">FAQ</p>
           <h2>{config.title} FAQ</h2>
         </div>
-        <div className="faq-list">
-          {config.faqs.map((faq) => (
-            <article key={faq.question}>
-              <h3>{faq.question}</h3>
-              <p>{faq.answer}</p>
-            </article>
-          ))}
-        </div>
+        <FAQAccordion faqs={config.faqs} />
       </section>
       <section className="section content-section disclaimer-section">
         <div className="section-heading">

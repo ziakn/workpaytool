@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FAQAccordion from "./components/FAQAccordion";
 import ToolCard from "./components/ToolCard";
 import { categories, countries } from "./data/site";
 
@@ -12,19 +13,34 @@ const popularTools = [
 ];
 
 const faqs = [
-  [
-    "Are WorkPayTools calculators free?",
-    "Yes. The first version focuses on free calculators and guides for employees, freelancers, and small businesses.",
-  ],
-  [
-    "Do the calculators replace professional advice?",
-    "No. They are planning tools. Tax, payroll, and legal rules can change, so confirm important decisions with a qualified professional.",
-  ],
-  [
-    "Which countries are supported first?",
-    "The starting country pages cover the US, UK, Canada, Australia, Germany, France, Italy, Spain, Netherlands, Ireland, Qatar, and UAE.",
-  ],
+  {
+    question: "Are WorkPayTools calculators free?",
+    answer:
+      "Yes. The first version focuses on free calculators and guides for employees, freelancers, and small businesses.",
+  },
+  {
+    question: "Do the calculators replace professional advice?",
+    answer:
+      "No. They are planning tools. Tax, payroll, and legal rules can change, so confirm important decisions with a qualified professional.",
+  },
+  {
+    question: "Which countries are supported first?",
+    answer:
+      "The starting country pages cover the US, UK, Canada, Australia, Germany, France, Italy, Spain, Netherlands, Ireland, Qatar, and UAE.",
+  },
 ];
+
+const homepageCategoryOrder = [
+  "Salary Tools",
+  "Business Tools",
+  "Invoice Tools",
+  "Tax Tools",
+  "Time Tools",
+];
+
+const orderedCategories = homepageCategoryOrder.map((title) =>
+  categories.find((category) => category.title === title),
+);
 
 export default function Home() {
   return (
@@ -46,12 +62,33 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="hero-panel" aria-label="Popular calculator examples">
-          {popularTools.slice(0, 4).map(([label, href]) => (
-            <Link key={href} href={href}>
-              {label}
-            </Link>
-          ))}
+        <div className="hero-panel calculator-preview" aria-label="Quick salary estimate">
+          <h2>Quick Salary Estimate</h2>
+          <label>
+            <span>Annual Salary</span>
+            <input readOnly value="$60,000" />
+          </label>
+          <label>
+            <span>Hours Per Week</span>
+            <input readOnly value="40" />
+          </label>
+          <Link className="primary-button" href="/salary-calculator">
+            Calculate
+          </Link>
+          <div className="preview-results">
+            <div>
+              <span>Monthly Pay</span>
+              <strong>$5,000</strong>
+            </div>
+            <div>
+              <span>Weekly Pay</span>
+              <strong>$1,153.85</strong>
+            </div>
+            <div>
+              <span>Hourly Pay</span>
+              <strong>$28.85</strong>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -72,7 +109,7 @@ export default function Home() {
         </div>
       </section>
 
-      {categories.map((category) => (
+      {orderedCategories.map((category) => (
         <section className="section compact-section" key={category.href}>
           <div className="section-heading split-heading">
             <div>
@@ -138,14 +175,7 @@ export default function Home() {
           <p className="eyebrow">FAQ</p>
           <h2>Common questions</h2>
         </div>
-        <div className="faq-list">
-          {faqs.map(([question, answer]) => (
-            <article key={question}>
-              <h3>{question}</h3>
-              <p>{answer}</p>
-            </article>
-          ))}
-        </div>
+        <FAQAccordion faqs={faqs} />
       </section>
     </main>
   );
