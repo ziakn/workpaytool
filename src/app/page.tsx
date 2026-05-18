@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
   BarChart3,
@@ -209,16 +210,16 @@ export default function HomePage() {
     <main className="min-h-screen bg-background text-text-main">
       <header className="header">
         <div className="container flex h-full items-center justify-between gap-5">
-          <a className="logo" href="#">
+          <Link className="logo" href="/">
             RealSalary<span>.</span>
-          </a>
+          </Link>
 
           <nav className="hidden items-center gap-6 text-sm font-semibold text-ink-700 lg:flex">
-            <a href="#calculator">Salary Calculator</a>
-            <a href="#popular-calculators">Cost of Living</a>
-            <a href="#comparisons">Compare Cities</a>
-            <a href="#countries">Countries</a>
-            <a href="#resources">Resources</a>
+            <Link href="/salary-calculator">Salary Calculator</Link>
+            <Link href="/cost-of-living-calculator">Cost of Living</Link>
+            <Link href="/compare">Compare Cities</Link>
+            <Link href="/countries">Countries</Link>
+            <Link href="/resources">Resources</Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -259,9 +260,9 @@ export default function HomePage() {
               <a className="btn-primary" href="#calculator">
                 Calculate Real Salary
               </a>
-              <a className="btn-outline" href="#comparisons">
+              <Link className="btn-outline" href="/compare">
                 View Popular Comparisons
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -502,9 +503,9 @@ export default function HomePage() {
         <div className="container py-12">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_3fr]">
             <div>
-              <a className="logo text-surface" href="#">
+              <Link className="logo text-surface" href="/">
                 RealSalary<span>.</span>
-              </a>
+              </Link>
               <p className="mt-4 max-w-sm text-sm text-desert-200">
                 Know what your salary is really worth before you move or accept a job.
               </p>
