@@ -1,26 +1,244 @@
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/roboto-slab/700.css";
+@import "@fontsource/roboto-slab/800.css";
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f1e3;
+  --surface: #fffdf7;
+  --primary: #132238;
+  --primary-dark: #0e1828;
+  --secondary: #8b5e34;
+  --secondary-dark: #6f4526;
+  --accent: #c9973a;
+  --accent-dark: #9e6f21;
+  --muted-red: #9b2f2f;
+  --denim-blue: #2f5d7c;
+  --border: #e2d3b8;
+  --input-border: #d8c29b;
+  --text-main: #1e1a16;
+  --text-muted: #6b5e4e;
+  --ink-700: #3a3028;
+  --success: #2f6b45;
+  --warning: #b7791f;
+  --danger: #9b2f2f;
+  --font-heading: "Roboto Slab", Georgia, serif;
+  --font-body: "Inter", Arial, sans-serif;
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: Arial, Helvetica, sans-serif;
+  --color-surface: var(--surface);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-muted-red: var(--muted-red);
+  --color-denim-blue: var(--denim-blue);
+  --color-border: var(--border);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-desert-50: #fffdf7;
+  --color-desert-100: #f7f1e3;
+  --color-desert-200: #efe2c8;
+  --color-desert-300: #e2d3b8;
+  --color-navy-900: #132238;
+  --color-navy-800: #0e1828;
+  --color-saddle-700: #8b5e34;
+  --color-saddle-800: #6f4526;
+  --color-gold-500: #c9973a;
+  --color-gold-600: #9e6f21;
+  --color-denim-700: #2f5d7c;
+  --color-rust-700: #9b2f2f;
+  --color-ink-900: #1e1a16;
+  --color-ink-700: #3a3028;
+  --color-ink-500: #6b5e4e;
+  --font-sans: var(--font-body);
+  --font-body: var(--font-body);
+  --font-heading: var(--font-heading);
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --radius-card: 24px;
+  --radius-input: 12px;
+  --shadow-card: 0 18px 45px rgba(30, 26, 22, 0.12);
+  --shadow-soft: 0 12px 30px rgba(30, 26, 22, 0.08);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  margin: 0;
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+h1,
+h2,
+h3,
+.brand {
+  font-family: var(--font-heading);
+  letter-spacing: 0;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  max-width: 820px;
+  color: var(--primary);
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+h2 {
+  color: var(--primary);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+h3 {
+  color: var(--primary);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+small {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+a {
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.hero {
+  background:
+    radial-gradient(circle at top left, rgba(201, 151, 58, 0.18), transparent 35%),
+    linear-gradient(180deg, #f7f1e3 0%, #efe2c8 100%);
+}
+
+.badge {
+  border: 1px solid #d8c29b;
+  border-radius: 999px;
+  background: #efe2c8;
+  color: var(--secondary);
+}
+
+.card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 12px 30px rgba(30, 26, 22, 0.08);
+}
+
+.calculator-card {
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: 0 18px 45px rgba(30, 26, 22, 0.12);
+  padding: 28px;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  background: #fbf7ee;
+  color: var(--text-main);
+  padding: 14px 16px;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.input:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 4px rgba(139, 94, 52, 0.12);
+}
+
+.label {
+  color: var(--ink-700);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.result-card {
+  border-radius: 24px;
+  background: var(--primary);
+  color: var(--surface);
+  padding: 28px;
+}
+
+.result-number {
+  color: var(--accent);
+  font-family: var(--font-heading);
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.western-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9973a, transparent);
+}
+
+.section-label {
+  color: var(--secondary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 38px;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+
+  h3 {
+    font-size: 22px;
+  }
+
+  .calculator-card,
+  .result-card {
+    border-radius: 20px;
+    padding: 22px;
+  }
+
+  .result-number {
+    font-size: 38px;
+  }
 }
