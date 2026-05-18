@@ -1,0 +1,17 @@
+export const countries = [
+  "UK",
+  "Germany",
+  "France",
+  "Netherlands",
+  "Ireland",
+  "Spain",
+  "Italy",
+  "Portugal",
+  "Poland",
+  "Sweden",
+  "Norway",
+  "Denmark",
+  "Switzerland",
+  "Austria",
+  "Belgium",
+];

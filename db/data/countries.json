@@ -1,0 +1,5 @@
+[
+  { "slug": "us", "name": "United States", "currency": "USD" },
+  { "slug": "uk", "name": "United Kingdom", "currency": "GBP" },
+  { "slug": "germany", "name": "Germany", "currency": "EUR" }
+]

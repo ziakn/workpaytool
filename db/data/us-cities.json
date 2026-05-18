@@ -1,0 +1,5 @@
+[
+  { "slug": "new-york-ny", "name": "New York, NY", "state": "new-york" },
+  { "slug": "dallas-tx", "name": "Dallas, TX", "state": "texas" },
+  { "slug": "austin-tx", "name": "Austin, TX", "state": "texas" }
+]
