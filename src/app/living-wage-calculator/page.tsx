@@ -3,15 +3,15 @@ import { CalculatorPageTemplate } from "@/components/templates/CalculatorPageTem
 import { calculatorDescription, pageTitle } from "@/lib/data/seo";
 
 export const metadata: Metadata = {
-  title: pageTitle("Salary Calculator"),
-  description: calculatorDescription("salary calculator"),
+  title: pageTitle("Living Wage Calculator"),
+  description: calculatorDescription("living wage calculator"),
 };
 
 export default function Page() {
   return (
     <CalculatorPageTemplate
-      subtitle="Estimate your salary by year, month, week, day, or hour."
-      title="Salary Calculator"
+      subtitle="Estimate living wage needs by location and household type."
+      title="Living Wage Calculator"
     />
   );
 }

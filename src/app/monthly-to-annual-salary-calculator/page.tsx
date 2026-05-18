@@ -3,15 +3,15 @@ import { CalculatorPageTemplate } from "@/components/templates/CalculatorPageTem
 import { calculatorDescription, pageTitle } from "@/lib/data/seo";
 
 export const metadata: Metadata = {
-  title: pageTitle("Salary Calculator"),
-  description: calculatorDescription("salary calculator"),
+  title: pageTitle("Monthly to Annual Salary Calculator"),
+  description: calculatorDescription("monthly to annual salary calculator"),
 };
 
 export default function Page() {
   return (
     <CalculatorPageTemplate
-      subtitle="Estimate your salary by year, month, week, day, or hour."
-      title="Salary Calculator"
+      subtitle="Convert monthly salary into annual, weekly, daily, and hourly pay."
+      title="Monthly to Annual Salary Calculator"
     />
   );
 }

@@ -3,15 +3,15 @@ import { CalculatorPageTemplate } from "@/components/templates/CalculatorPageTem
 import { calculatorDescription, pageTitle } from "@/lib/data/seo";
 
 export const metadata: Metadata = {
-  title: pageTitle("Salary Calculator"),
-  description: calculatorDescription("salary calculator"),
+  title: pageTitle("Net to Gross Salary Calculator"),
+  description: calculatorDescription("net to gross salary calculator"),
 };
 
 export default function Page() {
   return (
     <CalculatorPageTemplate
-      subtitle="Estimate your salary by year, month, week, day, or hour."
-      title="Salary Calculator"
+      subtitle="Estimate the gross salary needed to reach your target take-home pay."
+      title="Net to Gross Salary Calculator"
     />
   );
 }

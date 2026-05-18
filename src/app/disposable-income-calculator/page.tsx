@@ -3,15 +3,15 @@ import { CalculatorPageTemplate } from "@/components/templates/CalculatorPageTem
 import { calculatorDescription, pageTitle } from "@/lib/data/seo";
 
 export const metadata: Metadata = {
-  title: pageTitle("Salary Calculator"),
-  description: calculatorDescription("salary calculator"),
+  title: pageTitle("Disposable Income Calculator"),
+  description: calculatorDescription("disposable income calculator"),
 };
 
 export default function Page() {
   return (
     <CalculatorPageTemplate
-      subtitle="Estimate your salary by year, month, week, day, or hour."
-      title="Salary Calculator"
+      subtitle="Estimate disposable income after taxes, rent, and recurring costs."
+      title="Disposable Income Calculator"
     />
   );
 }

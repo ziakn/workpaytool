@@ -810,6 +810,203 @@ button {
   color: var(--gold);
 }
 
+.breadcrumb {
+  margin-bottom: 24px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.breadcrumb a {
+  color: var(--western-brown);
+  font-weight: 600;
+}
+
+.breadcrumb span {
+  color: var(--text-main);
+}
+
+.calculator-hero {
+  padding: 72px 0 48px;
+  background:
+    radial-gradient(circle at top left, rgba(201, 151, 58, 0.16), transparent 32%),
+    linear-gradient(180deg, #f7f1e3 0%, #efe2c8 100%);
+}
+
+.calculator-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 48px;
+  align-items: start;
+}
+
+.page-badge {
+  display: inline-flex;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--bg-soft);
+  color: var(--western-brown);
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.calculator-page-title {
+  max-width: 760px;
+  margin-top: 18px;
+  color: var(--primary);
+  font-family: var(--font-heading);
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -1.2px;
+  line-height: 1.1;
+}
+
+.calculator-page-subtitle {
+  max-width: 720px;
+  margin-top: 16px;
+  color: var(--text-secondary);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.summary-card {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-soft);
+  padding: 22px;
+}
+
+.summary-card h3 {
+  color: var(--primary);
+  font-family: var(--font-heading);
+  font-size: 20px;
+}
+
+.summary-card li {
+  margin-top: 10px;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.calculator-section {
+  background: var(--bg-main);
+  padding: 48px 0 72px;
+}
+
+.calculator-grid {
+  display: grid;
+  grid-template-columns: 560px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.main-calculator-card {
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-card);
+  padding: 28px;
+}
+
+.calculator-card-title {
+  color: var(--primary);
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.result-panel {
+  position: sticky;
+  top: 100px;
+}
+
+.result-empty {
+  border: 1px dashed var(--border-strong);
+  border-radius: 24px;
+  background: #fbf7ee;
+  color: var(--text-muted);
+  padding: 28px;
+}
+
+.content-section {
+  background: var(--card-bg);
+  padding: 72px 0;
+}
+
+.content-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.content-section h2 {
+  margin-bottom: 16px;
+  color: var(--primary);
+  font-family: var(--font-heading);
+  font-size: 34px;
+}
+
+.content-section p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.example-box {
+  margin-top: 32px;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--gold);
+  border-radius: 18px;
+  background: var(--bg-main);
+  padding: 22px;
+}
+
+.methodology-box {
+  margin-top: 36px;
+  border-radius: 22px;
+  background: var(--primary);
+  color: var(--card-bg);
+  padding: 26px;
+}
+
+.methodology-box h3 {
+  color: var(--gold);
+  font-family: var(--font-heading);
+  font-size: 24px;
+}
+
+.methodology-box p {
+  margin-top: 12px;
+  color: var(--bg-soft);
+}
+
+.methodology-link {
+  display: inline-flex;
+  margin-top: 16px;
+  color: var(--gold);
+  font-weight: 800;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.related-card {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card-bg);
+  padding: 20px;
+  color: var(--primary);
+  font-weight: 800;
+  box-shadow: var(--shadow-soft);
+}
+
 .footer-divider {
   border-top: 1px solid rgba(201, 151, 58, 0.35);
 }
@@ -887,6 +1084,19 @@ td {
   .footer-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .calculator-hero-grid,
+  .calculator-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-panel {
+    position: static;
+  }
+
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
@@ -901,6 +1111,10 @@ td {
   h1 {
     font-size: 38px;
     line-height: 1.1;
+  }
+
+  .calculator-page-title {
+    font-size: 34px;
   }
 
   h2 {
