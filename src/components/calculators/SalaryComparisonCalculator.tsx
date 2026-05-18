@@ -39,6 +39,16 @@ const locationData: LocationData[] = [
   { label: "Miami, FL", slug: "miami-fl", costIndex: 121, rent: 2350, stateTaxRate: 0 },
   { label: "Boston, MA", slug: "boston-ma", costIndex: 138, rent: 2950, stateTaxRate: 0.05 },
   { label: "Denver, CO", slug: "denver-co", costIndex: 116, rent: 2100, stateTaxRate: 0.044 },
+  { label: "Houston, TX", slug: "houston-tx", costIndex: 96, rent: 1500, stateTaxRate: 0 },
+  { label: "Atlanta, GA", slug: "atlanta-ga", costIndex: 108, rent: 1750, stateTaxRate: 0.052 },
+  { label: "Phoenix, AZ", slug: "phoenix-az", costIndex: 107, rent: 1700, stateTaxRate: 0.025 },
+  { label: "London", slug: "london", costIndex: 150, rent: 2850, stateTaxRate: 0.12 },
+  { label: "Berlin", slug: "berlin", costIndex: 114, rent: 1550, stateTaxRate: 0.16 },
+  { label: "Amsterdam", slug: "amsterdam", costIndex: 133, rent: 2350, stateTaxRate: 0.14 },
+  { label: "Paris", slug: "paris", costIndex: 128, rent: 2200, stateTaxRate: 0.15 },
+  { label: "Madrid", slug: "madrid", costIndex: 105, rent: 1500, stateTaxRate: 0.13 },
+  { label: "Dublin", slug: "dublin", costIndex: 137, rent: 2500, stateTaxRate: 0.13 },
+  { label: "Lisbon", slug: "lisbon", costIndex: 100, rent: 1450, stateTaxRate: 0.12 },
 ];
 
 const payFrequencies = ["Yearly", "Monthly", "Hourly"];
@@ -59,15 +69,22 @@ export function SalaryComparisonCalculator({
   buttonText = "Calculate Real Salary",
   resultLabel = "Estimated equivalent salary",
   emptyText = "Enter your salary and locations to see your real spending power.",
+  fixedComparison,
 }: {
   layout?: "inline" | "panel";
   cardTitle?: string;
   buttonText?: string;
   resultLabel?: string;
   emptyText?: string;
+  fixedComparison?: {
+    cityA: string;
+    cityB: string;
+    cityALabel: string;
+    cityBLabel: string;
+  };
 }) {
-  const [currentLocation, setCurrentLocation] = useState("Dallas, TX");
-  const [newLocation, setNewLocation] = useState("New York, NY");
+  const [currentLocation, setCurrentLocation] = useState(fixedComparison?.cityBLabel ?? "Dallas, TX");
+  const [newLocation, setNewLocation] = useState(fixedComparison?.cityALabel ?? "New York, NY");
   const [salary, setSalary] = useState("80,000");
   const [payFrequency, setPayFrequency] = useState("Yearly");
   const [hoursPerWeek, setHoursPerWeek] = useState("40");
@@ -80,6 +97,41 @@ export function SalaryComparisonCalculator({
   const resultRef = useRef<HTMLDivElement>(null);
 
   const salaryNumber = useMemo(() => parseSalary(salary), [salary]);
+  const directionValue = `${currentLocation} to ${newLocation}`;
+
+  function updateDirection(value: string) {
+    if (!fixedComparison) {
+      return;
+    }
+
+    if (value === `${fixedComparison.cityALabel} to ${fixedComparison.cityBLabel}`) {
+      setCurrentLocation(fixedComparison.cityALabel);
+      setNewLocation(fixedComparison.cityBLabel);
+      return;
+    }
+
+    setCurrentLocation(fixedComparison.cityBLabel);
+    setNewLocation(fixedComparison.cityALabel);
+  }
+
+  const salaryField = (className?: string) => (
+    <label className={className}>
+      <span className="label">Current salary</span>
+      <div className="salary-input-wrap">
+        <span>$</span>
+        <input
+          className={`input salary-input ${error === "Enter a valid salary amount." ? "input-error" : ""}`}
+          inputMode="numeric"
+          max={10000000}
+          min={1}
+          onChange={(event) => setSalary(formatSalaryInput(event.target.value))}
+          placeholder="80,000"
+          type="text"
+          value={salary}
+        />
+      </div>
+    </label>
+  );
 
   function calculate() {
     setError("");
@@ -207,34 +259,38 @@ export function SalaryComparisonCalculator({
         </div>
 
         <div className="calculator-form-grid">
-          <SearchableLocationField
-            label="Current location"
-            onChange={setCurrentLocation}
-            placeholder="Select current city"
-            value={currentLocation}
-          />
-          <SearchableLocationField
-            label="New location"
-            onChange={setNewLocation}
-            placeholder="Select new city"
-            value={newLocation}
-          />
-          <label>
-            <span className="label">Current salary</span>
-            <div className="salary-input-wrap">
-              <span>$</span>
-              <input
-                className={`input salary-input ${error === "Enter a valid salary amount." ? "input-error" : ""}`}
-                inputMode="numeric"
-                max={10000000}
-                min={1}
-                onChange={(event) => setSalary(formatSalaryInput(event.target.value))}
-                placeholder="80,000"
-                type="text"
-                value={salary}
+          {fixedComparison ? (
+            <>
+              {salaryField()}
+              <label>
+                <span className="label">Direction</span>
+                <select className="input" onChange={(event) => updateDirection(event.target.value)} value={directionValue}>
+                  <option value={`${fixedComparison.cityALabel} to ${fixedComparison.cityBLabel}`}>
+                    {fixedComparison.cityA} to {fixedComparison.cityB}
+                  </option>
+                  <option value={`${fixedComparison.cityBLabel} to ${fixedComparison.cityALabel}`}>
+                    {fixedComparison.cityB} to {fixedComparison.cityA}
+                  </option>
+                </select>
+              </label>
+            </>
+          ) : (
+            <>
+              <SearchableLocationField
+                label="Current location"
+                onChange={setCurrentLocation}
+                placeholder="Select current city"
+                value={currentLocation}
               />
-            </div>
-          </label>
+              <SearchableLocationField
+                label="New location"
+                onChange={setNewLocation}
+                placeholder="Select new city"
+                value={newLocation}
+              />
+              {salaryField("span-2")}
+            </>
+          )}
           <label>
             <span className="label">Pay frequency</span>
             <select className="input" onChange={(event) => setPayFrequency(event.target.value)} value={payFrequency}>

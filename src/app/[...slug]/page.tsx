@@ -8,7 +8,7 @@ import { CountryPageTemplate } from "@/components/templates/CountryPageTemplate"
 import { JobSalaryPageTemplate } from "@/components/templates/JobSalaryPageTemplate";
 import { absoluteUrl, getPageByPath, indexedPages } from "@/lib/site-pages";
 import {
-  comparisonTitleFromSlug,
+  cityComparisonTitleFromSlug,
   countryTitleFromSlug,
   titleFromSlug,
 } from "@/lib/utils/titleFromSlug";
@@ -18,9 +18,11 @@ type RouteParams = {
 };
 
 export function generateStaticParams() {
-  return indexedPages.map((page) => ({
-    slug: page.path.slice(1).split("/"),
-  }));
+  return indexedPages
+    .filter((page) => !page.path.startsWith("/us/compare/") && !/^\/compare\/[^/]+$/.test(page.path))
+    .map((page) => ({
+      slug: page.path.slice(1).split("/"),
+    }));
 }
 
 export async function generateMetadata({
@@ -30,6 +32,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const path = `/${slug.join("/")}`;
+
+  if (path.startsWith("/us/compare/") || path.startsWith("/compare/")) {
+    const comparisonTitle = cityComparisonTitleFromSlug(slug.at(-1) ?? "new-york-ny-vs-dallas-tx");
+    const [cityA = "City A", cityB = "City B"] = comparisonTitle.split(" vs ");
+
+    return {
+      title: `${comparisonTitle} Salary Comparison | RealSalary`,
+      description: `Compare salary, rent, taxes, cost of living, and disposable income between ${cityA} and ${cityB}.`,
+      alternates: {
+        canonical: absoluteUrl(path),
+      },
+    };
+  }
+
   const page = getPageByPath(path);
 
   if (!page) {
@@ -52,11 +68,6 @@ export default async function RoutePage({
 }) {
   const { slug } = await params;
   const path = `/${slug.join("/")}`;
-  const page = getPageByPath(path);
-
-  if (!page) {
-    notFound();
-  }
 
   if (path.includes("/cities/") && path.endsWith("/cost-of-living")) {
     return <CityPageTemplate city={titleFromSlug(slug.at(-2) ?? "city")} />;
@@ -67,7 +78,18 @@ export default async function RoutePage({
   }
 
   if (path.startsWith("/us/compare/") || path.startsWith("/compare/")) {
-    return <ComparisonPageTemplate title={`${comparisonTitleFromSlug(slug.at(-1) ?? "comparison")} Comparison`} />;
+    return (
+      <ComparisonPageTemplate
+        comparisonSlug={slug.at(-1) ?? "new-york-ny-vs-dallas-tx"}
+        region={path.startsWith("/us/") ? "us" : "international"}
+      />
+    );
+  }
+
+  const page = getPageByPath(path);
+
+  if (!page) {
+    notFound();
   }
 
   if (path.endsWith("/salary-calculator") && slug.length === 2 && !path.startsWith("/us/")) {

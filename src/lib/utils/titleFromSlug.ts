@@ -21,6 +21,21 @@ export function comparisonTitleFromSlug(slug: string) {
     .join(" vs ");
 }
 
+export function cityComparisonTitleFromSlug(slug: string) {
+  return slug
+    .replace("-salary", "")
+    .replace("-cost-of-living", "")
+    .split("-vs-")
+    .map((part) =>
+      part
+        .split("-")
+        .filter((piece) => !["ny", "tx", "ca", "il", "wa", "fl", "ma", "co", "dc", "az", "ga"].includes(piece))
+        .map((piece) => piece.charAt(0).toUpperCase() + piece.slice(1))
+        .join(" "),
+    )
+    .join(" vs ");
+}
+
 export function countryTitleFromSlug(slug: string) {
   if (slug === "uk") {
     return "UK";
