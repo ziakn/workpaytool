@@ -49,6 +49,9 @@ export function CalculatorPageTemplate({
   title: string;
   subtitle: string;
 }) {
+  const buttonText = calculatorButtonText(title);
+  const resultLabel = calculatorResultLabel(title);
+
   return (
     <main className="min-h-screen bg-background text-text-main">
       <Header />
@@ -85,25 +88,14 @@ export function CalculatorPageTemplate({
       </section>
 
       <section className="calculator-section">
-        <div className="container calculator-grid">
-          <div>
-            <SalaryComparisonCalculator />
-          </div>
-
-          <aside className="result-panel">
-            <div className="result-empty">
-              <p className="section-label">Result panel</p>
-              <h2 className="mt-2 text-[28px]">Your result will appear here.</h2>
-              <p className="mt-4 text-text-muted">
-                Enter your details and calculate to see equivalent salary, take-home pay,
-                rent, disposable income, and a side-by-side breakdown.
-              </p>
-            </div>
-            <div className="warning-box mt-4">
-              Rent data is limited for some locations, so RealSalary may use a cost-index estimate
-              and continue the calculation.
-            </div>
-          </aside>
+        <div className="container">
+          <SalaryComparisonCalculator
+            buttonText={buttonText}
+            cardTitle="Enter your details"
+            emptyText="Your result will appear here."
+            layout="panel"
+            resultLabel={resultLabel}
+          />
         </div>
       </section>
 
@@ -153,4 +145,42 @@ export function CalculatorPageTemplate({
       <Footer />
     </main>
   );
+}
+
+function calculatorButtonText(title: string) {
+  const labels: Record<string, string> = {
+    "Salary Calculator": "Calculate Salary",
+    "Take-Home Pay Calculator": "Calculate Take-Home Pay",
+    "Cost of Living Calculator": "Compare Cost of Living",
+    "Salary Comparison Calculator": "Compare Salary",
+    "Rent Affordability Calculator": "Calculate Affordable Rent",
+    "Relocation Salary Calculator": "Calculate Relocation Salary",
+    "Hourly to Annual Salary Calculator": "Convert Hourly Pay",
+    "Annual to Monthly Salary Calculator": "Convert Salary",
+    "Monthly to Annual Salary Calculator": "Convert Salary",
+    "Net to Gross Salary Calculator": "Calculate Gross Salary",
+    "Gross to Net Salary Calculator": "Calculate Net Pay",
+    "Job Offer Comparison Calculator": "Compare Job Offers",
+  };
+
+  return labels[title] ?? "Calculate Real Salary";
+}
+
+function calculatorResultLabel(title: string) {
+  const labels: Record<string, string> = {
+    "Salary Calculator": "Estimated Salary Breakdown",
+    "Take-Home Pay Calculator": "Estimated Take-Home Pay",
+    "Cost of Living Calculator": "Estimated Cost-of-Living Difference",
+    "Salary Comparison Calculator": "Estimated Equivalent Salary",
+    "Rent Affordability Calculator": "Estimated Affordable Rent",
+    "Relocation Salary Calculator": "Estimated Relocation Salary",
+    "Hourly to Annual Salary Calculator": "Estimated Annual Salary",
+    "Annual to Monthly Salary Calculator": "Estimated Monthly Salary",
+    "Monthly to Annual Salary Calculator": "Estimated Annual Salary",
+    "Net to Gross Salary Calculator": "Estimated Gross Salary Needed",
+    "Gross to Net Salary Calculator": "Estimated Net Salary",
+    "Job Offer Comparison Calculator": "Estimated Better Job Offer",
+  };
+
+  return labels[title] ?? "Estimated Equivalent Salary";
 }

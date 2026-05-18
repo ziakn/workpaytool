@@ -53,7 +53,19 @@ const rentTypeMultiplier: Record<string, number> = {
   "3-bedroom": 1.62,
 };
 
-export function SalaryComparisonCalculator() {
+export function SalaryComparisonCalculator({
+  layout = "inline",
+  cardTitle = "Compare Your Real Salary",
+  buttonText = "Calculate Real Salary",
+  resultLabel = "Estimated equivalent salary",
+  emptyText = "Enter your salary and locations to see your real spending power.",
+}: {
+  layout?: "inline" | "panel";
+  cardTitle?: string;
+  buttonText?: string;
+  resultLabel?: string;
+  emptyText?: string;
+}) {
   const [currentLocation, setCurrentLocation] = useState("Dallas, TX");
   const [newLocation, setNewLocation] = useState("New York, NY");
   const [salary, setSalary] = useState("80,000");
@@ -179,12 +191,12 @@ export function SalaryComparisonCalculator() {
     : [];
 
   return (
-    <div className="main-calculator">
-      <section className="calculator-card">
+    <div className={`main-calculator ${layout === "panel" ? "panel-layout" : ""}`}>
+      <section className="calculator-card main-calculator-card">
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
             <p className="section-label">Calculator</p>
-            <h2 className="calculator-title">Compare Your Real Salary</h2>
+            <h2 className="calculator-title calculator-card-title">{cardTitle}</h2>
             <p className="calculator-subtitle">
               See how far your salary goes after taxes, rent, and local prices.
             </p>
@@ -290,16 +302,16 @@ export function SalaryComparisonCalculator() {
           onClick={calculate}
           type="button"
         >
-          {isCalculating ? "Calculating..." : "Calculate Real Salary"}
+          {isCalculating ? "Calculating..." : buttonText}
         </button>
       </section>
 
-      <div ref={resultRef}>
+      <div className={layout === "panel" ? "result-panel" : ""} ref={resultRef}>
         {result ? (
           <div className="calculator-results">
             <div className="result-card">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="result-label">Estimated equivalent salary</p>
+                <p className="result-label">{resultLabel}</p>
                 <span className="accuracy-badge">Estimate based on public data</span>
               </div>
               <h2 className="result-title">
@@ -357,9 +369,15 @@ export function SalaryComparisonCalculator() {
           </div>
         ) : (
           <div className="empty-state mt-5 p-6">
-            Enter your salary and locations to see your real spending power.
+            {emptyText}
           </div>
         )}
+        {layout === "panel" ? (
+          <div className="warning-box mt-4">
+            Rent data is limited for some locations, so RealSalary may use a cost-index estimate
+            and continue the calculation.
+          </div>
+        ) : null}
       </div>
     </div>
   );
