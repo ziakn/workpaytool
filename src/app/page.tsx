@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import {
   BarChart3,
   BriefcaseBusiness,
@@ -9,7 +10,6 @@ import {
   Globe2,
   Home,
   Landmark,
-  Map,
   MapPin,
   Menu,
   TrendingUp,
@@ -21,101 +21,187 @@ const trustPoints = [
   "Built from public data sources",
 ];
 
-const resultStats = [
-  { label: "Monthly take-home", value: "$7,240" },
-  { label: "Estimated rent", value: "$3,450" },
-  { label: "Cost difference", value: "+31%" },
-  { label: "Disposable income", value: "$2,870" },
+const locations = [
+  "Dallas, TX",
+  "New York, NY",
+  "Austin, TX",
+  "Chicago, IL",
+  "Los Angeles, CA",
+  "San Francisco, CA",
+  "Seattle, WA",
+  "Miami, FL",
+  "Boston, MA",
+  "Denver, CO",
 ];
 
-const tools = [
-  { title: "Salary Comparison Calculator", icon: Calculator },
-  { title: "Take-Home Pay Calculator", icon: DollarSign },
-  { title: "Cost of Living Calculator", icon: BarChart3 },
-  { title: "Rent Affordability Calculator", icon: Home },
-  { title: "Hourly to Annual Calculator", icon: TrendingUp },
-  { title: "Relocation Salary Calculator", icon: BriefcaseBusiness },
+const resultStats = [
+  { label: "Monthly take-home", value: "$6,420" },
+  { label: "Estimated rent", value: "$3,100" },
+  { label: "Cost difference", value: "+42%" },
+  { label: "Disposable income", value: "$2,250" },
+];
+
+const calculators = [
+  {
+    title: "Salary Comparison Calculator",
+    description: "Compare your current salary with a new city or job offer.",
+    icon: Calculator,
+  },
+  {
+    title: "Take-Home Pay Calculator",
+    description: "Estimate monthly pay after taxes and payroll deductions.",
+    icon: DollarSign,
+  },
+  {
+    title: "Cost of Living Calculator",
+    description: "Compare local prices, rent, and everyday expenses.",
+    icon: BarChart3,
+  },
+  {
+    title: "Rent Affordability Calculator",
+    description: "Check what rent fits your income and household needs.",
+    icon: Home,
+  },
+  {
+    title: "Hourly to Annual Calculator",
+    description: "Convert hourly pay into monthly and yearly salary.",
+    icon: TrendingUp,
+  },
+  {
+    title: "Relocation Salary Calculator",
+    description: "Estimate the salary needed before accepting a move.",
+    icon: BriefcaseBusiness,
+  },
+  {
+    title: "Net to Gross Salary Calculator",
+    description: "Work backward from take-home pay to required gross salary.",
+    icon: DollarSign,
+  },
+  {
+    title: "Job Offer Comparison Calculator",
+    description: "Compare competing offers by location, rent, tax, and pay.",
+    icon: BriefcaseBusiness,
+  },
 ];
 
 const comparisons = [
-  ["New York", "Dallas", "$1,840 higher rent", "+32% cost"],
-  ["San Francisco", "Austin", "$2,120 higher rent", "+38% cost"],
-  ["Los Angeles", "Houston", "$1,260 higher rent", "+24% cost"],
-  ["Chicago", "Miami", "$420 lower rent", "-6% cost"],
-  ["Seattle", "Denver", "$580 higher rent", "+11% cost"],
-  ["Boston", "Atlanta", "$1,140 higher rent", "+21% cost"],
-  ["London", "Berlin", "£620 higher rent", "+18% cost"],
-  ["Paris", "Madrid", "€480 higher rent", "+13% cost"],
-  ["Amsterdam", "Dublin", "€260 lower rent", "-5% cost"],
+  ["New York", "Dallas"],
+  ["San Francisco", "Austin"],
+  ["Los Angeles", "Houston"],
+  ["Chicago", "Miami"],
+  ["Seattle", "Denver"],
+  ["Boston", "Atlanta"],
+  ["London", "Berlin"],
+  ["Paris", "Madrid"],
+  ["Amsterdam", "Dublin"],
 ];
 
 const steps = [
   {
-    title: "Enter your salary and location",
-    description: "Start with your current pay, city, filing status, and household setup.",
+    title: "Enter salary and location",
+    description: "Add your current city, target city, salary, and household setup.",
     icon: Calculator,
   },
   {
-    title: "Adjust for taxes, rent, and local prices",
-    description: "Estimate the major costs that actually change your spending power.",
+    title: "Adjust for tax, rent, and cost",
+    description: "RealSalary estimates the local costs that affect your monthly budget.",
     icon: Home,
   },
   {
-    title: "Compare your real spending power",
-    description: "See the equivalent salary and monthly disposable-income difference.",
-    icon: Map,
+    title: "See your real spending power",
+    description: "Compare the equivalent salary and disposable income between cities.",
+    icon: Compass,
   },
 ];
 
 const usTools = [
-  "US Salary Calculator",
-  "Federal Tax Estimate",
-  "State Take-Home Pay",
-  "Rent Affordability",
+  "USA Salary Calculator",
+  "USA Take-Home Pay Calculator",
+  "California Salary Calculator",
+  "Texas Salary Calculator",
+  "New York Salary Calculator",
+  "Florida Salary Calculator",
+  "New York City Cost of Living",
+  "Dallas Cost of Living",
+  "Austin Cost of Living",
+  "Los Angeles Cost of Living",
+  "San Francisco Cost of Living",
+  "Chicago Cost of Living",
 ];
 
 const europeTools = [
-  "Europe Salary Comparison",
-  "UK Take-Home Pay",
-  "Eurozone Cost of Living",
-  "Cross-Border Move Planner",
+  "UK Salary Calculator",
+  "Germany Salary Calculator",
+  "France Salary Calculator",
+  "Netherlands Salary Calculator",
+  "Ireland Salary Calculator",
+  "Spain Salary Calculator",
+  "Italy Salary Calculator",
+  "Portugal Salary Calculator",
+  "Poland Salary Calculator",
+  "Sweden Salary Calculator",
 ];
 
-const sources = ["BLS", "BEA", "HUD", "MIT Living Wage", "IRS", "Eurostat", "OECD"];
+const sources = [
+  ["BLS", "Used for occupation and wage estimates in the United States."],
+  ["BEA", "Used for regional income and economic comparison data."],
+  ["HUD", "Used for rent and housing affordability benchmarks."],
+  ["MIT Living Wage", "Used for household spending and living wage context."],
+  ["IRS", "Used for federal tax structure and filing-status assumptions."],
+  ["Eurostat", "Used for European income and cost-of-living indicators."],
+  ["OECD", "Used for international wage and purchasing-power context."],
+];
 
 const faqs = [
   [
-    "Is this salary calculator accurate?",
-    "RealSalary is designed for practical estimates, not exact payroll calculations. It combines salary, tax, rent, and local-price signals to help you compare offers.",
+    "Is RealSalary accurate?",
+    "RealSalary is built for practical planning estimates. It helps compare salary, taxes, rent, and spending power, but exact payroll outcomes can vary.",
   ],
   [
     "Does RealSalary include taxes?",
-    "Yes. The calculator experience is built around after-tax salary estimates, with filing status included as a key input.",
+    "Yes. The calculator is structured around after-tax salary estimates, including filing status as a core input.",
   ],
   [
-    "Where does cost-of-living data come from?",
-    "The product direction uses public sources such as BLS, BEA, HUD, MIT Living Wage, IRS, Eurostat, and OECD data.",
+    "Where does the cost-of-living data come from?",
+    "RealSalary is designed around public datasets and transparent methodology rather than hidden estimates.",
   ],
   [
     "Can I compare cities in different countries?",
-    "Yes. The interface is structured for US and European salary comparisons, including cross-country moves.",
+    "Yes. The homepage supports US and Europe comparisons, including city pairs like London vs Berlin and Paris vs Madrid.",
   ],
   [
     "Is this tax advice?",
-    "No. RealSalary is a planning tool and should not replace advice from a qualified tax professional.",
+    "No. RealSalary provides planning estimates only and is not a substitute for advice from a qualified tax professional.",
   ],
   [
     "How often is the data updated?",
-    "The UI is ready for scheduled data refreshes as the data pipeline is added behind the calculator.",
+    "The interface is prepared for recurring data updates as the salary and cost datasets are connected.",
   ],
 ];
 
 const footerColumns = [
-  ["Calculators", "Salary Calculator", "Cost of Living Calculator", "Take-Home Pay Calculator"],
-  ["Countries", "United States", "United Kingdom", "Germany", "France"],
-  ["Resources", "Compare Cities", "Data Sources", "Methodology"],
-  ["Company", "About", "Contact"],
-  ["Legal", "Privacy Policy", "Terms", "Disclaimer"],
+  [
+    "Calculators",
+    "Salary Calculator",
+    "Cost of Living Calculator",
+    "Take-Home Pay Calculator",
+    "Rent Affordability Calculator",
+    "Relocation Calculator",
+  ],
+  [
+    "Locations",
+    "United States",
+    "United Kingdom",
+    "Germany",
+    "France",
+    "Netherlands",
+    "Spain",
+    "Italy",
+    "Portugal",
+  ],
+  ["Resources", "Data Sources", "Methodology", "Salary Guides", "Cost of Living Guides", "FAQ"],
+  ["Company", "About", "Contact", "Editorial Policy"],
+  ["Legal", "Privacy Policy", "Terms", "Disclaimer", "Cookie Policy"],
 ];
 
 export default function HomePage() {
@@ -129,7 +215,7 @@ export default function HomePage() {
 
           <nav className="hidden items-center gap-6 text-sm font-semibold text-ink-700 lg:flex">
             <a href="#calculator">Salary Calculator</a>
-            <a href="#tools">Cost of Living</a>
+            <a href="#popular-calculators">Cost of Living</a>
             <a href="#comparisons">Compare Cities</a>
             <a href="#countries">Countries</a>
             <a href="#resources">Resources</a>
@@ -147,7 +233,7 @@ export default function HomePage() {
       </header>
 
       <section className="hero section pt-12 sm:pt-16">
-        <div className="container relative z-10 grid gap-10 lg:grid-cols-[1fr_520px] lg:items-center">
+        <div className="container relative z-10 grid gap-14 lg:grid-cols-[1fr_520px] lg:items-center">
           <div>
             <div className="badge">
               <Compass size={15} />
@@ -182,8 +268,11 @@ export default function HomePage() {
           <section id="calculator" className="calculator-card">
             <div className="mb-6 flex items-start justify-between gap-4">
               <div>
-                <p className="section-label">Premium Calculator</p>
-                <h2 className="mt-2 text-[30px]">Compare Your Salary</h2>
+                <p className="section-label">Main Calculator</p>
+                <h2 className="mt-2 text-[30px]">Compare Your Real Salary</h2>
+                <p className="mt-2 text-sm leading-6 text-text-muted">
+                  See how far your salary goes after taxes, rent, and local prices.
+                </p>
               </div>
               <span className="icon-box">
                 <Calculator size={22} />
@@ -193,15 +282,31 @@ export default function HomePage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <label>
                 <span className="label">Current location</span>
-                <input className="input" defaultValue="Dallas, TX" />
+                <select className="input" defaultValue="Dallas, TX">
+                  {locations.map((location) => (
+                    <option key={location}>{location}</option>
+                  ))}
+                </select>
               </label>
               <label>
                 <span className="label">New location</span>
-                <input className="input" defaultValue="New York, NY" />
+                <select className="input" defaultValue="New York, NY">
+                  {locations.map((location) => (
+                    <option key={location}>{location}</option>
+                  ))}
+                </select>
               </label>
               <label>
                 <span className="label">Current salary</span>
                 <input className="input" defaultValue="$80,000" />
+              </label>
+              <label>
+                <span className="label">Pay frequency</span>
+                <select className="input" defaultValue="yearly">
+                  <option value="yearly">Yearly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="hourly">Hourly</option>
+                </select>
               </label>
               <label>
                 <span className="label">Filing status</span>
@@ -213,18 +318,20 @@ export default function HomePage() {
               </label>
               <label>
                 <span className="label">Rent type</span>
-                <select className="input" defaultValue="one-bed">
+                <select className="input" defaultValue="1-bedroom">
                   <option value="studio">Studio</option>
-                  <option value="one-bed">1 bedroom</option>
-                  <option value="two-bed">2 bedrooms</option>
+                  <option value="1-bedroom">1-bedroom</option>
+                  <option value="2-bedroom">2-bedroom</option>
+                  <option value="3-bedroom">3-bedroom</option>
                 </select>
               </label>
-              <label>
+              <label className="sm:col-span-2">
                 <span className="label">Household type</span>
-                <select className="input" defaultValue="solo">
-                  <option value="solo">Solo</option>
+                <select className="input" defaultValue="single-adult">
+                  <option value="single-adult">Single adult</option>
                   <option value="couple">Couple</option>
-                  <option value="family">Family</option>
+                  <option value="family-1">Family with 1 child</option>
+                  <option value="family-2">Family with 2 children</option>
                 </select>
               </label>
             </div>
@@ -232,15 +339,26 @@ export default function HomePage() {
             <button className="btn-primary mt-5 w-full justify-center">
               Calculate Real Salary
             </button>
+          </section>
+        </div>
+      </section>
 
-            <div className="result-card mt-6">
-              <p className="small font-bold text-desert-200">Equivalent salary</p>
-              <p className="result-number mt-2">$118,400</p>
-              <p className="mt-3 text-sm leading-6 text-desert-200">
-                You need $118,400 in New York to match $80,000 in Dallas.
-              </p>
+      <section className="section py-12">
+        <div className="container">
+          <div className="result-card">
+            <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+              <div>
+                <p className="small font-bold text-desert-200">Quick result preview</p>
+                <p className="result-number mt-2">$118,400</p>
+                <h2 className="mt-3 text-[30px] text-surface">
+                  You need $118,400 in New York to match $80,000 in Dallas.
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-desert-200">
+                  Based on estimated taxes, rent, and local cost differences.
+                </p>
+              </div>
 
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-2">
                 {resultStats.map((stat) => (
                   <div className="result-stat" key={stat.label}>
                     <p className="text-xs font-semibold text-desert-200">{stat.label}</p>
@@ -251,15 +369,19 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-          </section>
+          </div>
         </div>
       </section>
 
-      <section id="tools" className="section">
+      <section id="popular-calculators" className="section">
         <div className="container">
-          <SectionHeading eyebrow="Popular Calculators" title="Salary tools for the decisions that matter." />
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {tools.map((tool) => {
+          <SectionHeading
+            eyebrow="Popular Calculators"
+            title="Salary Tools for Smarter Decisions"
+            subtitle="Use simple calculators to compare salary, taxes, rent, and real spending power."
+          />
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {calculators.map((tool) => {
               const Icon = tool.icon;
 
               return (
@@ -268,9 +390,10 @@ export default function HomePage() {
                     <Icon size={22} />
                   </span>
                   <h3 className="mt-5">{tool.title}</h3>
-                  <p className="mt-3 text-sm text-text-muted">
-                    Compare pay, costs, and real spending power with a clear finance-first view.
-                  </p>
+                  <p className="mt-3 text-sm text-text-muted">{tool.description}</p>
+                  <a className="mt-5 inline-flex text-sm font-extrabold text-primary" href="#calculator">
+                    Open Calculator
+                  </a>
                 </article>
               );
             })}
@@ -282,19 +405,19 @@ export default function HomePage() {
         <div className="container">
           <SectionHeading eyebrow="Compare Cities" title="Popular Salary Comparisons" />
           <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {comparisons.map(([cityA, cityB, rent, cost]) => (
+            {comparisons.map(([cityA, cityB]) => (
               <article className="comparison-card" key={`${cityA}-${cityB}`}>
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="font-heading text-xl font-extrabold text-primary">{cityA}</p>
-                    <p className="text-sm font-semibold text-text-muted">vs {cityB}</p>
+                    <p className="text-sm font-semibold text-text-muted">vs</p>
+                    <p className="font-heading text-xl font-extrabold text-primary">{cityB}</p>
                   </div>
                   <MapPin className="text-secondary" size={22} />
                 </div>
-                <div className="mt-5 grid gap-2 text-sm text-ink-700">
-                  <p>{rent}</p>
-                  <p>{cost}</p>
-                </div>
+                <p className="mt-5 text-sm text-ink-700">
+                  Compare salary, rent, and cost of living.
+                </p>
                 <a className="mt-5 inline-flex text-sm font-extrabold text-primary" href="#calculator">
                   Compare
                 </a>
@@ -306,10 +429,7 @@ export default function HomePage() {
 
       <section className="section">
         <div className="container">
-          <SectionHeading
-            eyebrow="How It Works"
-            title="How RealSalary Calculates Your Real Pay"
-          />
+          <SectionHeading eyebrow="How It Works" title="How RealSalary Works" />
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {steps.map((step, index) => {
               const Icon = step.icon;
@@ -334,29 +454,39 @@ export default function HomePage() {
       </section>
 
       <section id="countries" className="section bg-desert-200/55">
-        <div className="container grid gap-6 lg:grid-cols-2">
-          <ToolList title="US salary tools" tools={usTools} icon={Landmark} />
-          <ToolList title="Europe salary tools" tools={europeTools} icon={Globe2} />
+        <div className="container">
+          <ToolLinkSection title="US Salary and Cost-of-Living Tools" tools={usTools} icon={Landmark} />
         </div>
       </section>
 
-      <section id="resources" className="section">
+      <section className="section">
         <div className="container">
-          <SectionHeading eyebrow="Data Sources" title="Built on Public Salary and Cost Data" />
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
-            {sources.map((source) => (
+          <ToolLinkSection title="Europe Salary Calculators" tools={europeTools} icon={Globe2} />
+        </div>
+      </section>
+
+      <section id="resources" className="section bg-desert-200/55">
+        <div className="container">
+          <SectionHeading
+            eyebrow="Data Sources"
+            title="Built on Public Salary and Cost Data"
+            subtitle="RealSalary uses public datasets and transparent methodology instead of hidden estimates."
+          />
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {sources.map(([source, description]) => (
               <article className="source-card" key={source}>
                 <FileText className="text-secondary" size={20} />
                 <p className="mt-3 font-extrabold text-primary">{source}</p>
+                <p className="mt-2 text-sm leading-6 text-text-muted">{description}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section pt-0">
+      <section className="section">
         <div className="container max-w-[820px]">
-          <SectionHeading eyebrow="FAQ" title="Common questions" />
+          <SectionHeading eyebrow="FAQ" title="Questions About RealSalary" />
           <div className="mt-8 grid gap-4">
             {faqs.map(([question, answer]) => (
               <details className="faq-item" key={question}>
@@ -406,34 +536,39 @@ export default function HomePage() {
 function SectionHeading({
   eyebrow,
   title,
+  subtitle,
 }: Readonly<{
   eyebrow: string;
   title: string;
+  subtitle?: string;
 }>) {
   return (
     <div className="max-w-3xl">
       <p className="section-label">{eyebrow}</p>
       <h2 className="mt-3">{title}</h2>
+      {subtitle ? <p className="mt-4 text-text-muted">{subtitle}</p> : null}
     </div>
   );
 }
 
-function ToolList({
+function ToolLinkSection({
   title,
   tools,
   icon: Icon,
 }: Readonly<{
   title: string;
   tools: string[];
-  icon: typeof Landmark;
+  icon: LucideIcon;
 }>) {
   return (
     <article className="card rounded-card p-6">
-      <span className="icon-box">
-        <Icon size={22} />
-      </span>
-      <h2 className="mt-5 text-[30px]">{title}</h2>
-      <div className="mt-6 grid gap-3">
+      <div className="flex items-center gap-4">
+        <span className="icon-box">
+          <Icon size={22} />
+        </span>
+        <h2 className="text-[30px]">{title}</h2>
+      </div>
+      <div className="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {tools.map((tool) => (
           <a
             className="rounded-input border border-border bg-desert-50 px-4 py-3 text-sm font-bold text-ink-700 transition hover:bg-desert-200 hover:text-secondary"
