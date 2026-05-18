@@ -15,31 +15,12 @@ import {
   Menu,
   TrendingUp,
 } from "lucide-react";
+import { SalaryComparisonCalculator } from "@/components/calculators/SalaryComparisonCalculator";
 
 const trustPoints = [
   "After-tax salary estimate",
   "Rent and cost-of-living comparison",
   "Built from public data sources",
-];
-
-const locations = [
-  "Dallas, TX",
-  "New York, NY",
-  "Austin, TX",
-  "Chicago, IL",
-  "Los Angeles, CA",
-  "San Francisco, CA",
-  "Seattle, WA",
-  "Miami, FL",
-  "Boston, MA",
-  "Denver, CO",
-];
-
-const resultStats = [
-  { label: "Monthly take-home", value: "$6,420" },
-  { label: "Estimated rent", value: "$3,100" },
-  { label: "Cost difference", value: "+42%" },
-  { label: "Disposable income", value: "$2,250" },
 ];
 
 const calculators = [
@@ -268,103 +249,8 @@ export function HomepageTemplate() {
             </div>
           </div>
 
-          <section id="calculator" className="calculator-card">
-            <div className="mb-6 flex items-start justify-between gap-4">
-              <div>
-                <p className="section-label">Main Calculator</p>
-                <h2 className="calculator-title">Compare Your Real Salary</h2>
-                <p className="calculator-subtitle">
-                  See how far your salary goes after taxes, rent, and local prices.
-                </p>
-              </div>
-              <span className="icon-box">
-                <Calculator size={22} />
-              </span>
-            </div>
-
-            <div className="home-calculator-form">
-              <label>
-                <span className="label">Current location</span>
-                <select className="input" defaultValue="Dallas, TX">
-                  {locations.map((location) => (
-                    <option key={location}>{location}</option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <span className="label">New location</span>
-                <select className="input" defaultValue="New York, NY">
-                  {locations.map((location) => (
-                    <option key={location}>{location}</option>
-                  ))}
-                </select>
-              </label>
-              <label className="home-field-full">
-                <span className="label">Current salary</span>
-                <input className="input" defaultValue="$80,000" />
-              </label>
-              <label>
-                <span className="label">Pay frequency</span>
-                <select className="input" defaultValue="yearly">
-                  <option value="yearly">Yearly</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="hourly">Hourly</option>
-                </select>
-              </label>
-              <label>
-                <span className="label">Filing status</span>
-                <select className="input" defaultValue="single">
-                  <option value="single">Single</option>
-                  <option value="married">Married filing jointly</option>
-                  <option value="head">Head of household</option>
-                </select>
-              </label>
-              <label>
-                <span className="label">Rent type</span>
-                <select className="input" defaultValue="1-bedroom">
-                  <option value="studio">Studio</option>
-                  <option value="1-bedroom">1-bedroom</option>
-                  <option value="2-bedroom">2-bedroom</option>
-                  <option value="3-bedroom">3-bedroom</option>
-                </select>
-              </label>
-              <label>
-                <span className="label">Household type</span>
-                <select className="input" defaultValue="single-adult">
-                  <option value="single-adult">Single adult</option>
-                  <option value="couple">Couple</option>
-                  <option value="family-1">Family with 1 child</option>
-                  <option value="family-2">Family with 2 children</option>
-                </select>
-              </label>
-            </div>
-
-            <button className="btn-primary home-submit-button">
-              Calculate Real Salary
-            </button>
-          </section>
-        </div>
-      </section>
-
-      <section className="result-preview-section">
-        <div className="container">
-          <div className="result-card">
-            <p className="result-label">Estimated equivalent salary</p>
-            <h2 className="result-headline">
-              You need <span>$118,400</span> in New York to match <span>$80,000</span> in Dallas.
-            </h2>
-            <p className="mt-3 text-sm leading-6 text-desert-200">
-              Based on estimated taxes, rent, and local cost differences.
-            </p>
-
-            <div className="result-stat-grid">
-              {resultStats.map((stat) => (
-                <div className="result-stat" key={stat.label}>
-                  <p className="result-stat-label">{stat.label}</p>
-                  <p className="result-stat-value">{stat.value}</p>
-                </div>
-              ))}
-            </div>
+          <div id="calculator">
+            <SalaryComparisonCalculator />
           </div>
         </div>
       </section>

@@ -336,6 +336,18 @@ button {
   padding: 28px;
 }
 
+.main-calculator {
+  width: 520px;
+  max-width: 100%;
+}
+
+.calculator-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+
 .input {
   width: 100%;
   height: 50px;
@@ -357,6 +369,42 @@ button {
   box-shadow: 0 0 0 4px rgba(139, 94, 52, 0.13);
 }
 
+.input-error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 4px rgba(155, 47, 47, 0.1);
+}
+
+.searchable-select,
+.salary-input-wrap {
+  position: relative;
+}
+
+.searchable-select svg {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.searchable-select .input {
+  padding-left: 38px;
+}
+
+.salary-input-wrap > span {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  color: var(--text-muted);
+  font-weight: 800;
+  transform: translateY(-50%);
+}
+
+.salary-input {
+  padding-left: 32px;
+}
+
 .label {
   display: block;
   margin-bottom: 8px;
@@ -371,6 +419,12 @@ button {
   color: var(--card-bg);
   padding: 30px;
   box-shadow: 0 24px 70px rgba(19, 34, 56, 0.25);
+}
+
+.calculator-results {
+  display: grid;
+  gap: 20px;
+  margin-top: 24px;
 }
 
 .result-number {
@@ -482,6 +536,19 @@ button {
   line-height: 1.2;
 }
 
+.result-title {
+  margin-top: 10px;
+  color: var(--card-bg);
+  font-family: var(--font-heading);
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.result-highlight {
+  color: var(--gold);
+}
+
 .result-headline span {
   color: var(--gold);
 }
@@ -512,6 +579,103 @@ button {
   font-family: var(--font-heading);
   font-size: 22px;
   font-weight: 800;
+}
+
+.stat-label {
+  color: rgba(255, 253, 247, 0.72);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.stat-value {
+  color: var(--gold);
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.calculate-button {
+  width: 100%;
+  height: 54px;
+  margin-top: 20px;
+  border: 1px solid var(--primary);
+  border-radius: 12px;
+  background: var(--primary);
+  color: var(--card-bg);
+  box-shadow: 0 10px 24px rgba(19, 34, 56, 0.18);
+  font-size: 15px;
+  font-weight: 800;
+  transition:
+    background-color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.calculate-button:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.calculate-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.advanced-options {
+  margin-top: 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.advanced-options summary,
+.methodology-disclosure summary {
+  color: var(--secondary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.methodology-disclosure {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card-bg);
+  padding: 14px 16px;
+}
+
+.methodology-disclosure p {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.warning-box {
+  border: 1px solid rgba(183, 121, 31, 0.22);
+  border-radius: 14px;
+  background: rgba(183, 121, 31, 0.1);
+  color: var(--western-brown-dark);
+  padding: 14px 16px;
+}
+
+.accuracy-badge {
+  border: 1px solid rgba(201, 151, 58, 0.28);
+  border-radius: 999px;
+  background: rgba(201, 151, 58, 0.14);
+  color: var(--gold);
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.share-actions .btn-outline {
+  gap: 8px;
+  background: var(--card-bg);
 }
 
 .section-heading {
@@ -683,10 +847,22 @@ td {
   color: var(--danger);
 }
 
+.negative {
+  border: 1px solid rgba(155, 47, 47, 0.2);
+  background: rgba(155, 47, 47, 0.08);
+  color: var(--danger);
+}
+
 .success {
   border: 1px solid rgba(47, 107, 69, 0.2);
   background: rgba(47, 107, 69, 0.08);
   color: var(--success);
+}
+
+.neutral {
+  border: 1px solid rgba(183, 121, 31, 0.2);
+  background: rgba(183, 121, 31, 0.08);
+  color: var(--warning);
 }
 
 @media (max-width: 900px) {
@@ -702,6 +878,10 @@ td {
   .home-tools-grid,
   .home-comparisons-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .calculator-form-grid {
+    grid-template-columns: 1fr;
   }
 
   .footer-grid {
@@ -766,6 +946,10 @@ td {
 
   .result-stat-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .share-actions .btn-outline {
+    width: 100%;
   }
 
   .footer-grid {

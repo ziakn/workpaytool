@@ -1,4 +1,4 @@
-const rows = [
+const defaultRows = [
   ["Gross salary", "$118,400", "$80,000", "+$38,400"],
   ["Estimated tax", "$31,200", "$18,600", "+$12,600"],
   ["Monthly take-home", "$6,420", "$4,720", "+$1,700"],
@@ -8,15 +8,23 @@ const rows = [
   ["Equivalent salary", "$118,400", "$80,000", "+48%"],
 ];
 
-export function ComparisonTable() {
+export function ComparisonTable({
+  currentLabel = "Dallas",
+  newLabel = "New York",
+  rows = defaultRows,
+}: {
+  currentLabel?: string;
+  newLabel?: string;
+  rows?: string[][];
+}) {
   return (
-    <div className="table-wrapper">
+    <div className="table-wrapper comparison-table">
       <table className="w-full min-w-[680px] text-left text-sm">
-        <thead>
+        <thead className="table-head">
           <tr>
             <th className="p-4">Metric</th>
-            <th className="p-4">New York</th>
-            <th className="p-4">Dallas</th>
+            <th className="p-4">{currentLabel}</th>
+            <th className="p-4">{newLabel}</th>
             <th className="p-4">Difference</th>
           </tr>
         </thead>
